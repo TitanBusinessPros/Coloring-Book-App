@@ -335,6 +335,29 @@
             font-size: 0.95em;
             font-weight: 500;
         }
+
+        .sign-in-gate {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .gate-emoji {
+            font-size: 3em;
+        }
+
+        .gate-text {
+            font-size: 1.3em;
+            color: #a0c0ff;
+        }
+
+        .gate-btn {
+            font-size: 1.2em;
+            padding: 16px 30px;
+        }
         
         .loading {
             text-align: center;
@@ -544,6 +567,13 @@
 
         <h1>🎨 Sophie's Line Art🖌️</h1>
 
+        <div id="signInGate" class="sign-in-gate">
+            <p class="gate-emoji">🔒🎨</p>
+            <p class="gate-text">Sign in with Google to start coloring!</p>
+            <button id="gateSignInBtn" class="auth-btn gate-btn">🔑 Sign in with Google</button>
+        </div>
+
+        <div id="appContent" class="hidden">
         <div id="sectionSelection">
             <div class="sections">
                 <button class="section-btn" onclick="selectSection(1)">🦁 Animals</button>
@@ -708,6 +738,7 @@
             <div class="action-buttons">
                 <button class="action-btn download-btn" onclick="downloadCanvas()">📥 Download as PNG</button>
             </div>
+        </div>
         </div>
     </div>
 

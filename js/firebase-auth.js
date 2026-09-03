@@ -14,17 +14,23 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
 const signInBtn = document.getElementById("signInBtn");
+const gateSignInBtn = document.getElementById("gateSignInBtn");
 const signOutBtn = document.getElementById("signOutBtn");
 const userInfo = document.getElementById("userInfo");
 const userAvatar = document.getElementById("userAvatar");
 const userName = document.getElementById("userName");
+const signInGate = document.getElementById("signInGate");
+const appContent = document.getElementById("appContent");
 
-signInBtn.addEventListener("click", () => {
+function doSignIn() {
   signInWithPopup(auth, googleProvider).catch((error) => {
     console.error("Google sign-in failed:", error);
     alert("Sign-in failed: " + error.message);
   });
-});
+}
+
+signInBtn.addEventListener("click", doSignIn);
+gateSignInBtn.addEventListener("click", doSignIn);
 
 signOutBtn.addEventListener("click", () => {
   signOut(auth).catch((error) => {
@@ -39,10 +45,22 @@ onAuthStateChanged(auth, (user) => {
     userAvatar.src = user.photoURL || "";
     userAvatar.alt = user.displayName || "User avatar";
     userName.textContent = user.displayName || user.email || "Signed in";
+
+    // Unlock the app
+    signInGate.classList.add("hidden");
+    appContent.classList.remove("hidden");
   } else {
     signInBtn.classList.remove("hidden");
     userInfo.classList.add("hidden");
     userAvatar.src = "";
     userName.textContent = "";
+
+    // Lock the app back down (e.g. on sign-out) and return to the gallery
+    // view so nobody's left staring at a canvas they can no longer reach.
+    signInGate.classList.remove("hidden");
+    appContent.classList.add("hidden");
+    if (typeof window.backToGallery === "function") {
+      window.backToGallery();
+    }
   }
 });
