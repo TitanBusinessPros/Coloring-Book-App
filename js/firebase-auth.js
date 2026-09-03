@@ -7,7 +7,7 @@ import {
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-import { firebaseConfig } from "./firebase-config.js";
+import { firebaseConfig } from "./firebase-config.js?v=3";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -34,11 +34,20 @@ function showAuthError(context, error) {
   authStatus.classList.remove("hidden");
 }
 
+function setStatus(text) {
+  authStatus.textContent = text;
+  authStatus.classList.remove("hidden");
+}
+
 function doSignIn() {
-  authStatus.classList.add("hidden");
-  signInWithPopup(auth, googleProvider).catch((error) => {
-    showAuthError("signing in", error);
-  });
+  setStatus("Opening Google sign-in popup...");
+  signInWithPopup(auth, googleProvider)
+    .then(() => {
+      authStatus.classList.add("hidden");
+    })
+    .catch((error) => {
+      showAuthError("signing in", error);
+    });
 }
 
 gateSignInBtn.addEventListener("click", doSignIn);
