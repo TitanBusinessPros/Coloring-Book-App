@@ -358,6 +358,16 @@
             font-size: 1.2em;
             padding: 16px 30px;
         }
+
+        .auth-status {
+            max-width: 500px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: rgba(220, 50, 50, 0.25);
+            border: 1px solid rgba(255, 100, 100, 0.5);
+            color: #ffd0d0;
+            font-size: 0.95em;
+        }
         
         .loading {
             text-align: center;
@@ -570,6 +580,7 @@
             <p class="gate-emoji">🔒🎨</p>
             <p class="gate-text">Sign in with Google to start coloring!</p>
             <button id="gateSignInBtn" class="auth-btn gate-btn">🔑 Sign in with Google</button>
+            <p id="authStatus" class="auth-status hidden"></p>
         </div>
 
         <div id="appContent" class="hidden">

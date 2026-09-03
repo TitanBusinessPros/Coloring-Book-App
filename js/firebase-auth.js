@@ -21,21 +21,33 @@ const userAvatar = document.getElementById("userAvatar");
 const userName = document.getElementById("userName");
 const signInGate = document.getElementById("signInGate");
 const appContent = document.getElementById("appContent");
+const authStatus = document.getElementById("authStatus");
+
+// alert() is unreliable here: browsers commonly suppress dialogs that
+// fire automatically on page load (i.e. right after Google redirects
+// back) rather than from a direct click, which would leave a real error
+// completely invisible. Print it on the page instead so it can't be
+// silently swallowed.
+function showAuthError(context, error) {
+  console.error(context, error);
+  authStatus.textContent =
+    `Sign-in error (${context}): ${error.code || ""} ${error.message || error}`.trim();
+  authStatus.classList.remove("hidden");
+}
 
 function doSignIn() {
+  authStatus.classList.add("hidden");
   // Popup-based sign-in gets silently blocked in a lot of real-world
   // browsers/in-app browsers with no catchable error. Redirect-based
   // sign-in (full navigation to Google and back) avoids that entirely.
   signInWithRedirect(auth, googleProvider).catch((error) => {
-    console.error("Google sign-in failed:", error);
-    alert("Sign-in failed: " + error.message);
+    showAuthError("starting sign-in", error);
   });
 }
 
 // Completes the sign-in after Google redirects back to this page.
 getRedirectResult(auth).catch((error) => {
-  console.error("Google sign-in redirect failed:", error);
-  alert("Sign-in failed: " + error.message);
+  showAuthError("completing sign-in", error);
 });
 
 gateSignInBtn.addEventListener("click", doSignIn);
