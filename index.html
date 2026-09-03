@@ -48,11 +48,47 @@
         h1 {
             text-align: center;
             color: #ffffff;
-            margin-bottom: 30px;
             font-size: 3em;
             text-shadow: 0 0 10px rgba(100, 150, 255, 0.7);
             letter-spacing: 2px;
             font-weight: 300;
+        }
+
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .brand-logo {
+            max-width: 220px;
+            width: 100%;
+            height: auto;
+        }
+
+        .site-footer {
+            max-width: 900px;
+            margin: 30px auto 0;
+            padding: 20px;
+            text-align: center;
+            color: #a0c0ff;
+            font-size: 0.85em;
+            border-top: 1px solid rgba(100, 150, 255, 0.2);
+        }
+
+        .site-footer p {
+            margin: 6px 0;
+        }
+
+        .site-footer a {
+            color: #a0c0ff;
+        }
+
+        .footer-credits {
+            opacity: 0.7;
+            font-size: 0.9em;
         }
         
         .sections {
@@ -575,7 +611,10 @@
             </div>
         </div>
 
-        <h1>🎨 Sophie's Line Art🖌️</h1>
+        <div class="brand-header">
+            <img class="brand-logo" src="https://raw.githubusercontent.com/TitanBusinessPros/Titian-Main/main/Titan%20Logo-2.png" alt="Titan Business Pros logo">
+            <h1>Titan Business Pros</h1>
+        </div>
 
         <div id="signInGate" class="sign-in-gate">
             <p class="gate-emoji">🔒🎨</p>
@@ -752,6 +791,17 @@
         </div>
         </div>
     </div>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Titan Business Pros LLC. All rights reserved.</p>
+        <p>
+            Oklahoma City, OK &middot;
+            <a href="tel:+14059987979">405-998-7979</a> &middot;
+            <a href="mailto:info@titanbusinesspros.com">info@titanbusinesspros.com</a> &middot;
+            <a href="https://www.oklahoma.marketing" target="_blank" rel="noopener">www.oklahoma.marketing</a>
+        </p>
+        <p class="footer-credits">Built with the help of Anthropic (Claude), DeepSeek, and ChatGPT.</p>
+    </footer>
 
     <script>
         // ===== IMAGE CONFIGURATION =====
