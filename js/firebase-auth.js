@@ -14,7 +14,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-const signInBtn = document.getElementById("signInBtn");
 const gateSignInBtn = document.getElementById("gateSignInBtn");
 const signOutBtn = document.getElementById("signOutBtn");
 const userInfo = document.getElementById("userInfo");
@@ -39,7 +38,6 @@ getRedirectResult(auth).catch((error) => {
   alert("Sign-in failed: " + error.message);
 });
 
-signInBtn.addEventListener("click", doSignIn);
 gateSignInBtn.addEventListener("click", doSignIn);
 
 signOutBtn.addEventListener("click", () => {
@@ -50,7 +48,6 @@ signOutBtn.addEventListener("click", () => {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    signInBtn.classList.add("hidden");
     userInfo.classList.remove("hidden");
     userAvatar.src = user.photoURL || "";
     userAvatar.alt = user.displayName || "User avatar";
@@ -60,7 +57,6 @@ onAuthStateChanged(auth, (user) => {
     signInGate.classList.add("hidden");
     appContent.classList.remove("hidden");
   } else {
-    signInBtn.classList.remove("hidden");
     userInfo.classList.add("hidden");
     userAvatar.src = "";
     userName.textContent = "";
