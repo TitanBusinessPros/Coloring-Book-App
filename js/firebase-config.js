@@ -8,10 +8,11 @@
 // with the values from: Firebase Console -> Project settings -> General ->
 // "Your apps" -> Web app -> SDK setup and configuration -> Config.
 export const firebaseConfig = {
-  apiKey: "REPLACE_WITH_API_KEY",
-  authDomain: "REPLACE_WITH_PROJECT_ID.firebaseapp.com",
-  projectId: "REPLACE_WITH_PROJECT_ID",
-  storageBucket: "REPLACE_WITH_PROJECT_ID.appspot.com",
-  messagingSenderId: "REPLACE_WITH_SENDER_ID",
-  appId: "REPLACE_WITH_APP_ID"
+  apiKey: "AIzaSyBjDRyyS7EQXJ9QrsBj-aitdPd_FMs1hBU",
+  authDomain: "coloring-book-53311.firebaseapp.com",
+  projectId: "coloring-book-53311",
+  storageBucket: "coloring-book-53311.firebasestorage.app",
+  messagingSenderId: "1016056525624",
+  appId: "1:1016056525624:web:e0201e18905ca6744247cd",
+  measurementId: "G-4GCQR7H8KG"
 };
