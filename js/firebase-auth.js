@@ -3,8 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/fireba
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
@@ -37,18 +36,10 @@ function showAuthError(context, error) {
 
 function doSignIn() {
   authStatus.classList.add("hidden");
-  // Popup-based sign-in gets silently blocked in a lot of real-world
-  // browsers/in-app browsers with no catchable error. Redirect-based
-  // sign-in (full navigation to Google and back) avoids that entirely.
-  signInWithRedirect(auth, googleProvider).catch((error) => {
-    showAuthError("starting sign-in", error);
+  signInWithPopup(auth, googleProvider).catch((error) => {
+    showAuthError("signing in", error);
   });
 }
-
-// Completes the sign-in after Google redirects back to this page.
-getRedirectResult(auth).catch((error) => {
-  showAuthError("completing sign-in", error);
-});
 
 gateSignInBtn.addEventListener("click", doSignIn);
 
