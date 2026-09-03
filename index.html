@@ -282,6 +282,59 @@
         .hidden {
             display: none;
         }
+
+        .auth-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .auth-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            background: rgba(50, 50, 70, 0.8);
+            color: #e0e0e0;
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .auth-btn:hover {
+            background: rgba(100, 150, 255, 0.3);
+            transform: scale(1.03);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(50, 50, 70, 0.8);
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            border-radius: 10px;
+            padding: 6px 14px 6px 6px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: rgba(100, 150, 255, 0.3);
+        }
+
+        .user-name {
+            color: #e0e0e0;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
         
         .loading {
             text-align: center;
@@ -480,8 +533,17 @@
 </head>
 <body>
     <div class="container">
+        <div class="auth-bar">
+            <button id="signInBtn" class="auth-btn">🔑 Sign in with Google</button>
+            <div id="userInfo" class="user-info hidden">
+                <img id="userAvatar" class="user-avatar" src="" alt="User avatar">
+                <span id="userName" class="user-name"></span>
+                <button id="signOutBtn" class="auth-btn">Sign out</button>
+            </div>
+        </div>
+
         <h1>🎨 Sophie's Line Art🖌️</h1>
-        
+
         <div id="sectionSelection">
             <div class="sections">
                 <button class="section-btn" onclick="selectSection(1)">🦁 Animals</button>
@@ -1356,5 +1418,7 @@
         // Initialize with Animals section
         selectSection(1);
     </script>
+
+    <script type="module" src="js/firebase-auth.js"></script>
 </body>
 </html>

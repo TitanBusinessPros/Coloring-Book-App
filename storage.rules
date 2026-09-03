@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// Default-deny. Cloud Storage isn't used by the app yet — this is a safe
+// placeholder so the project has locked-down rules from day one.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
