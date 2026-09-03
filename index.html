@@ -1293,9 +1293,27 @@
             ctx.globalAlpha = 1.0;
         }
         
+        // Tracks whether the current touch gesture ever involved more than
+        // one finger, so a pinch/pan isn't misread as a draw stroke the
+        // instant one finger lifts before the other.
+        let multiTouchActive = false;
+
         function handleTouch(e) {
+            if (e.touches.length > 1) {
+                // 2+ fingers = pinch-zoom/pan. Don't preventDefault and
+                // don't draw - let the browser handle it natively so
+                // people can zoom in/out and scroll around the canvas.
+                multiTouchActive = true;
+                return;
+            }
+            if (multiTouchActive) {
+                if (e.touches.length === 0) multiTouchActive = false;
+                return;
+            }
+
             e.preventDefault();
-            const touch = e.touches[0];
+            const touch = e.touches[0] || e.changedTouches[0];
+            if (!touch) return;
             const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
                 clientX: touch.clientX,
                 clientY: touch.clientY
