@@ -800,6 +800,10 @@
             <a href="mailto:info@titanbusinesspros.com">info@titanbusinesspros.com</a> &middot;
             <a href="https://www.oklahoma.marketing" target="_blank" rel="noopener">www.oklahoma.marketing</a>
         </p>
+        <p>
+            <a href="terms.html">Terms &amp; Conditions</a> &middot;
+            <a href="privacy.html">Privacy Policy</a>
+        </p>
         <p class="footer-credits">Built with the help of Anthropic (Claude), DeepSeek, and ChatGPT.</p>
     </footer>
 
@@ -1377,9 +1381,17 @@
             // Convert fill color to RGB
             const fillRGB = hexToRgb(fillColor);
             if (!fillRGB) return;
-            
+
             // Don't fill if we're trying to fill with the same color
             if (colorsMatch({r: startR, g: startG, b: startB}, fillRGB, 5)) return;
+
+            // Don't start a fill from a black outline pixel. With the high
+            // tolerance above, starting on a line lets the fill spread along
+            // the whole connected line network (and bleed through
+            // anti-aliased edges into neighboring regions), recoloring most
+            // of the artwork instead of the area the user meant to click.
+            const startLuminance = 0.299 * startR + 0.587 * startG + 0.114 * startB;
+            if (startLuminance < 60) return;
             
             // Use a stack for iterative approach to avoid recursion limits
             const stack = [[startX, startY]];
