@@ -7,7 +7,7 @@ A browser-based coloring book (`index.html`, no build step) with draw/fill/erase
 - `index.html` — the app itself (UI, canvas drawing logic).
 - `js/firebase-config.js` — Firebase project config (public client identifier, safe to commit).
 - `js/firebase-auth.js` — Google sign-in via Firebase Authentication.
-- `firebase.json`, `.firebaserc` — Firebase Hosting deploy config.
+- `firebase.json`, `.firebaserc` — Firebase Hosting deploy config (Hosting is currently **disabled**; GitHub Pages is the sole live host — see below).
 - `firestore.rules`, `storage.rules` — default-deny security rules (not used yet, just locked down).
 
 ## One-time setup (after the Firebase project is created)
@@ -19,8 +19,13 @@ A browser-based coloring book (`index.html`, no build step) with draw/fill/erase
 3. In `.firebaserc`, replace `REPLACE_WITH_FIREBASE_PROJECT_ID` with the actual project ID.
 4. If testing locally on something other than `localhost`, add that domain under **Authentication → Settings → Authorized domains**.
 
-## Deploy (Firebase Hosting)
+## Hosting
 
-```
-firebase deploy --only hosting
-```
+**GitHub Pages is the sole live host:** https://titanbusinesspros.github.io/Coloring-Book-App/
+— it rebuilds automatically on every push to `main`.
+
+Firebase Hosting for this project was previously kept as a synced secondary
+copy, but has been disabled (`firebase hosting:disable`) so there's only one
+live copy to keep in sync. Google Sign-In (Firebase Authentication) is
+unaffected by this — it's a separate Firebase product from Hosting. To bring
+the Firebase Hosting copy back: `firebase deploy --only hosting`.
