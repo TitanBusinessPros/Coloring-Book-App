@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎨 Artistic Coloring Studio 🖌️</title>
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
     <style>
         * {
             margin: 0;
@@ -644,6 +650,10 @@
 
             <div class="kids-games-link">
                 <a class="section-btn" href="https://titanbusinesspros.github.io/Free-Kids-Education-Games/" target="_blank" rel="noopener">🎓 Kids Education Games</a>
+            </div>
+
+            <div class="kids-games-link">
+                <button id="installAppBtn" class="section-btn hidden">📲 Install App</button>
             </div>
 
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
@@ -1607,6 +1617,41 @@
         
         // Initialize with Animals section
         selectSection(1);
+
+        // PWA: register the service worker (required, alongside the
+        // manifest, before the browser will offer an install prompt).
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch((err) => {
+                    console.error('Service worker registration failed:', err);
+                });
+            });
+        }
+
+        // PWA: "Install App" button. The browser only fires
+        // beforeinstallprompt if the manifest + icons + service worker are
+        // all valid and the visitor hasn't already installed the app, so
+        // the button stays hidden until that happens.
+        let deferredInstallPrompt = null;
+        const installAppBtn = document.getElementById('installAppBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            installAppBtn.classList.remove('hidden');
+        });
+
+        installAppBtn.addEventListener('click', async () => {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            installAppBtn.classList.add('hidden');
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installAppBtn.classList.add('hidden');
+        });
     </script>
 
     <script type="module" src="js/firebase-auth.js?v=3"></script>
