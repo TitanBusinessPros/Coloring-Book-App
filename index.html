@@ -951,6 +951,14 @@
         let currentOpacity = 1.0; // 0 to 1
         let isDrawing = false;
         let canvas, ctx, baseImage;
+        // A pixel mask of where the original black outline art is, captured
+        // once when a page is loaded, before any coloring happens. The fill
+        // tool uses this (not the live, possibly-already-colored canvas) to
+        // decide where outlines are, so a line never gets crossed no matter
+        // what color has been filled next to it.
+        let originalLineMask = null;
+        let originalLineMaskWidth = 0;
+        let originalLineMaskHeight = 0;
         let undoStack = [];
         let redoStack = [];
         let maxUndoSteps = 20;
@@ -1033,7 +1041,12 @@
                 
                 // Draw image on canvas
                 ctx.drawImage(baseImage, 0, 0);
-                
+
+                // Capture where the outline art is, from this pristine,
+                // never-colored version of the image. See the fill tool
+                // for why this is kept separate from the live canvas.
+                buildOriginalLineMask();
+
                 // Save initial state to undo stack
                 saveState();
                 
@@ -1374,6 +1387,36 @@
             undoBtn.disabled = undoStack.length === 0;
         }
         
+        // Captures which pixels are outline art in the current, pristine
+        // (not-yet-colored) canvas. Called right after a page's image is
+        // drawn, before any filling happens. The fill tool checks against
+        // this frozen snapshot instead of the live canvas, so outlines stay
+        // outlines even after a region next to them gets filled the same
+        // color.
+        function buildOriginalLineMask() {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+            const mask = new Uint8Array(width * height);
+
+            for (let i = 0; i < width * height; i++) {
+                const pos = i * 4;
+                const luminance = 0.299 * data[pos] + 0.587 * data[pos + 1] + 0.114 * data[pos + 2];
+                mask[i] = luminance < 120 ? 1 : 0;
+            }
+
+            originalLineMask = mask;
+            originalLineMaskWidth = width;
+            originalLineMaskHeight = height;
+        }
+
+        function isOriginalLinePixel(x, y) {
+            if (!originalLineMask) return false;
+            if (x < 0 || x >= originalLineMaskWidth || y < 0 || y >= originalLineMaskHeight) return false;
+            return originalLineMask[y * originalLineMaskWidth + x] === 1;
+        }
+
         // Improved Flood Fill Algorithm with fixed tolerance of 100 and brush effects
         function floodFill(startX, startY, fillColor) {
             const tolerance = 100; // Fixed tolerance as requested
@@ -1396,13 +1439,12 @@
             // Don't fill if we're trying to fill with the same color
             if (colorsMatch({r: startR, g: startG, b: startB}, fillRGB, 5)) return;
 
-            // Don't start a fill from a black outline pixel. With the high
-            // tolerance above, starting on a line lets the fill spread along
-            // the whole connected line network (and bleed through
-            // anti-aliased edges into neighboring regions), recoloring most
-            // of the artwork instead of the area the user meant to click.
-            const startLuminance = 0.299 * startR + 0.587 * startG + 0.114 * startB;
-            if (startLuminance < 60) return;
+            // Never start a fill on the original outline art (see
+            // buildOriginalLineMask). Color-based guessing here doesn't
+            // work: once a region is filled the same color as the
+            // outline (e.g. black), the outline is indistinguishable from
+            // the fill by color alone, on the click point or anywhere else.
+            if (isOriginalLinePixel(startX, startY)) return;
             
             // Use a stack for iterative approach to avoid recursion limits
             const stack = [[startX, startY]];
@@ -1435,8 +1477,9 @@
                 const b = data[pos + 2];
                 const a = data[pos + 3];
                 
-                // Check if pixel matches the target color within tolerance
-                if (a > 10 && colorsMatch({r, g, b}, {r: startR, g: startG, b: startB}, tolerance)) {
+                // Never cross the original outline art, and check if the
+                // pixel matches the target color within tolerance
+                if (a > 10 && !isOriginalLinePixel(x, y) && colorsMatch({r, g, b}, {r: startR, g: startG, b: startB}, tolerance)) {
                     // Apply brush-specific fill effect
                     let finalR = fillRGB.r;
                     let finalG = fillRGB.g;
