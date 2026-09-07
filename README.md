@@ -10,6 +10,23 @@ A browser-based coloring book (`index.html`, no build step) with draw/fill/erase
 - `firebase.json`, `.firebaserc` — Firebase Hosting deploy config (Hosting is currently **disabled**; GitHub Pages is the sole live host — see below).
 - `firestore.rules`, `storage.rules` — default-deny security rules (not used yet, just locked down).
 
+## Coloring page sections
+
+`imageLibrary` in `index.html` holds one array per section button:
+
+1. Animals — `TitanBusinessPros/KCF-Animals`
+2. Action — `TitanBusinessPros/KCF-Cars-Trucks`
+3. Fantasy — `TitanBusinessPros/KCF-Fantasy`
+4. Holidays & Events — `TitanBusinessPros/KCF-Holidays`
+5. Foods — `TitanBusinessPros/CBA-CBP`, `Food/` folder
+6. Professions — `TitanBusinessPros/CBA-CBP`, `Professions/` folder
+
+Each image is referenced by a public `raw.githubusercontent.com` URL (via the
+`github.com/.../raw/main/...` redirect form) — no images are committed into
+this repo itself. Adding a new section means adding images to the source repo
+(public, so the raw links resolve), then adding a `section-btn` + a new
+numbered array in `imageLibrary`.
+
 ## One-time setup (after the Firebase project is created)
 
 1. In the [Firebase Console](https://console.firebase.google.com/) for the new project:
